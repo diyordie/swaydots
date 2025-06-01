@@ -1,0 +1,2 @@
+# swaydots
+sway dotfiles
