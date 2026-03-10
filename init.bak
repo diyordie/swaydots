@@ -1,0 +1,144 @@
+#!/bin/sh
+
+# universal STARTUP!!!
+waypaper --restore &
+exec /usr/lib/xfce-polkit/xfce-polkit &
+gsr-ui &
+fcitx5 & 
+nicotine -n &
+
+riverctl border-width 2
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
+systemctl --user restart xdg-desktop-portal
+
+# exclusive BINDINGS!!!
+
+# pennystox
+    #yambar -c ~/.config/yambar/river-minimal-pennystox.yml &
+    #mako -c ~/.config/mako/river &
+    #riverctl map normal Alt+Shift E spawn "swaynag --background 262523 --border 42424200 --button-background D48D26 --border-bottom 424242 --details-border-size 0 --border-bottom-size 0 --button-border 0 --button-gap 0 --message-padding 1 --button-padding 1 -f TerminessNerdFont 2 --text 8B7D74 --button-text 262523 -t warning -m 'What would you like to do?' -B ' sleep ' 'pkill swaynag && gtklock' -B ' logout ' 'pkill river' -B ' shutdown ' 'poweroff'"
+    #riverctl background-color 0x262523ff
+    #riverctl border-color-focused 0x89992Bff
+    #riverctl border-color-unfocused 0x262523ff
+
+# sunset
+    #swaybg -i /home/waozer/Pictures/Wallpapers/Waneella/Rectangle/Horizon_Pt-2_5400x2700.png &
+    yambar -c ~/.config/yambar/river-minimal-grey.yml &
+    mako -c /home/waozer/.config/mako/riverpurple &
+    riverctl map normal Alt+Shift E spawn "swaynag --background 11121A --border 42424200 --button-background A05D6E --border-bottom 424242 --details-border-size 0 --border-bottom-size 0 --button-border 0 --button-gap 1 --message-padding 1 --button-padding 1 -f TerminessNerdFont 2 --text ffffff --button-text ffffff -t warning -m 'What would you like to do?' -B  ' sleep ' 'pkill swaynag && gtklock' -B ' logout ' 'pkill river' -B ' shutdown ' 'poweroff'"
+    riverctl background-color 0x11121Aff
+    riverctl border-color-unfocused 0x11121A
+    riverctl border-color-focused 0xA05D6E
+
+# so mako looks pretty
+way-displays &
+
+# spawn BINDINGS!!! 
+riverctl map normal Control+Shift S spawn ~/.config/river/app
+riverctl map normal Alt Return spawn alacritty
+riverctl map normal Alt P spawn "kickoff -c ~/.config/kickoff/river.toml"
+
+# normal BINDINGS!!!
+
+# quit
+riverctl map normal Alt+Shift Q close
+
+# viewmodes
+riverctl map normal Alt S toggle-float
+riverctl map normal Alt F toggle-fullscreen
+
+# mouse viewmode binds
+riverctl map-pointer normal Alt BTN_LEFT move-view
+riverctl map-pointer normal Alt BTN_RIGHT resize-view
+
+# j + k related movement binds
+riverctl map normal Alt J focus-view next
+riverctl map normal Alt K focus-view previous
+riverctl map normal Alt+Shift J swap next
+riverctl map normal Alt+Shift K swap previous
+
+# multi-monitor tag switching
+riverctl map normal Alt Period focus-output next
+riverctl map normal Alt Comma focus-output previous
+riverctl map normal Alt+Shift Period send-to-output next
+riverctl map normal Alt+Shift Comma send-to-output previous
+
+# zoom to original
+riverctl map normal Alt+Shift Return zoom
+
+# change main
+riverctl map normal Alt Up    send-layout-cmd rivertile "main-location top"
+riverctl map normal Alt Right send-layout-cmd rivertile "main-location right"
+riverctl map normal Alt Down  send-layout-cmd rivertile "main-location bottom"
+riverctl map normal Alt Left  send-layout-cmd rivertile "main-location left"
+
+# sizing
+riverctl map normal Alt L send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map normal Alt H send-layout-cmd rivertile "main-ratio +0.05"
+riverctl map normal Alt U send-layout-cmd rivertile "main-count +1"
+riverctl map normal Alt I send-layout-cmd rivertile "main-count -1"
+
+# tag BINDINGS!!!
+
+for i in $(seq 1 9)
+do
+    tags=$((1 << ($i - 1)))
+
+    # focus tags
+    riverctl map normal Alt $i set-focused-tags $tags
+
+    # send tag elsewhere
+    riverctl map normal Alt+Shift $i set-view-tags $tags
+
+    # bring tag with you
+    riverctl map normal Alt+Control $i toggle-focused-tags $tags
+done
+
+# media KEYS!!!
+
+for mode in normal locked
+do
+    # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
+    riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5'
+    riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5'
+    riverctl map $mode None XF86AudioMute         spawn 'pamixer --toggle-mute'
+
+    # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
+    riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
+    riverctl map $mode None XF86AudioPlay  spawn 'playerctl play-pause'
+    riverctl map $mode None XF86AudioPrev  spawn 'playerctl previous'
+    riverctl map $mode None XF86AudioNext  spawn 'playerctl next'
+
+    # Control screen backlight brightness with brightnessctl (https://github.com/Hummer12007/brightnessctl)
+    riverctl map $mode None XF86MonBrightnessUp   spawn 'brightnessctl set +5%'
+    riverctl map $mode None XF86MonBrightnessDown spawn 'brightnessctl set 5%-'
+done
+
+# Set keyboard repeat rate
+riverctl set-repeat 50 300
+
+
+# individual APP RULES!!!
+riverctl rule-add -app-id 'float*' -title 'foo' float
+riverctl rule-add -title 'Open Files' float
+riverctl rule-add -app-id "xfce-polkit" float
+riverctl rule-add -app-id "xfce-polkit" ssd
+riverctl rule-add -app-id "bar" csd
+riverctl rule-add -app-id "floorp" ssd
+riverctl rule-add -app-id "nemo" ssd
+riverctl rule-add -app-id "waypaper" ssd
+riverctl rule-add -app-id "steam" ssd
+riverctl rule-add -app-id "thunar" ssd
+riverctl rule-add -app-id "nwg-look" ssd
+riverctl rule-add -app-id "zathura" ssd
+riverctl rule-add -app-id "xed" ssd
+
+# start the damn thing
+# riverctl default-layout rivertile
+riverctl default-layout rivertile
+rivertile -view-padding 6 -outer-padding 6 &
+
