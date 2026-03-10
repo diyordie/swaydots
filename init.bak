@@ -1,16 +1,10 @@
 #!/bin/sh
 
 # universal STARTUP!!!
-waypaper --restore &
 exec /usr/lib/xfce-polkit/xfce-polkit &
-gsr-ui &
-fcitx5 & 
-nicotine -n &
 
 riverctl border-width 2
-GTK_IM_MODULE=fcitx
-QT_IM_MODULE=fcitx
-XMODIFIERS=@im=fcitx
+
 systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
 systemctl --user restart xdg-desktop-portal
@@ -26,9 +20,8 @@ systemctl --user restart xdg-desktop-portal
     #riverctl border-color-unfocused 0x262523ff
 
 # sunset
-    #swaybg -i /home/waozer/Pictures/Wallpapers/Waneella/Rectangle/Horizon_Pt-2_5400x2700.png &
-    yambar -c ~/.config/yambar/river-minimal-grey.yml &
-    mako -c /home/waozer/.config/mako/riverpurple &
+    waybar &
+    mako &
     riverctl map normal Alt+Shift E spawn "swaynag --background 11121A --border 42424200 --button-background A05D6E --border-bottom 424242 --details-border-size 0 --border-bottom-size 0 --button-border 0 --button-gap 1 --message-padding 1 --button-padding 1 -f TerminessNerdFont 2 --text ffffff --button-text ffffff -t warning -m 'What would you like to do?' -B  ' sleep ' 'pkill swaynag && gtklock' -B ' logout ' 'pkill river' -B ' shutdown ' 'poweroff'"
     riverctl background-color 0x11121Aff
     riverctl border-color-unfocused 0x11121A
