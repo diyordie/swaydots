@@ -22,7 +22,6 @@ systemctl --user restart xdg-desktop-portal
 # sunset
     waybar &
     mako &
-    riverctl map normal Alt+Shift E spawn "swaynag --background 11121A --border 42424200 --button-background A05D6E --border-bottom 424242 --details-border-size 0 --border-bottom-size 0 --button-border 0 --button-gap 1 --message-padding 1 --button-padding 1 -f TerminessNerdFont 2 --text ffffff --button-text ffffff -t warning -m 'What would you like to do?' -B  ' sleep ' 'pkill swaynag && gtklock' -B ' logout ' 'pkill river' -B ' shutdown ' 'poweroff'"
     riverctl background-color 0x11121Aff
     riverctl border-color-unfocused 0x11121A
     riverctl border-color-focused 0xA05D6E
