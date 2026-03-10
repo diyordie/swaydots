@@ -33,7 +33,7 @@ way-displays &
 # spawn BINDINGS!!! 
 riverctl map normal Control+Shift S spawn ~/.config/river/app
 riverctl map normal Alt Return spawn alacritty
-riverctl map normal Alt P spawn "kickoff -c ~/.config/kickoff/river.toml"
+riverctl map normal Alt P spawn kickoff
 
 # normal BINDINGS!!!
 
